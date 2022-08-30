@@ -1,0 +1,348 @@
+GST_DEBUG=3 gst-launch-1.0 -v \
+filesrc location =input ! \
+queue ! \
+decodebin ! \
+x264enc ! \
+flvmux name=mux streamable=true ! \
+rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" \
+
+
+==========================
+gst-launch-1.0 filesrc location =input ! \
+queue2 ! \
+qtdemux name=demux  flvmux  name=mux demux.video ! \
+queue ! \
+mux.video demux.audio ! \
+queue ! \
+mux.audio mux.src ! \
+queue ! \
+rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1"
+
+
+gst-launch-1.0 filesrc location =input ! \
+qtdemux ! queue ! flvmux name=mux streamable=true ! \
+ audioconvert ! audioresample \
+rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" \
+
+
+
+
+
+=============================
+
+gst-launch-1.0 filesrc location =input \
+ ! decodebin name=demux \
+ ! queue \
+ ! x264enc \
+ ! flvmux name=mux streamable=true \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" \
+ demux.audio_%u \
+ ! queue \
+ ! mpg123audiodec \
+ ! mux. \
+ 
+ 
+ 
+ 
+ 
+=============================
+
+gst-launch-1.0 filesrc location =input flvmux name=mux streamable=true \
+ ! decodebin name=dec dec.video_%u \
+ ! queue \
+ ! x264enc \
+ dec.audio_%u \
+ ! queue \
+ ! mpg123audiodec \
+ ! mux.audio_%u mux.video_%u \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" \
+ 
+ 
+ 
+=============================
+
+gst-launch-1.0  filesrc location =input \
+ ! qtdemux name=dec dec.video_0 \
+ ! queue \
+ ! flvmux name=mux streamable=true mux. \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true name=server_sinker \
+ decodebin \
+ ! queue \
+ ! mpg123audiodec \
+ ! mux. \
+ ! server_sinker \
+ 
+ 
+ 
+ =============================
+
+gst-launch-1.0 flvmux name=mux streamable=true \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true name=server_sinker \
+ audiotestsrc samplesperbuffer=44100 num-buffers=250 \
+ ! audioconvert \
+ ! mux.  videotestsrc num-buffers=250 \
+ ! video/x-raw,framerate=25/1 \
+ ! x264enc \
+ ! mux.
+ 
+ 
+ 
+ 
+GST_DEBUG=4 gst-launch-1.0 flvmux name=mux streamable=true \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+ filesrc location =input name=file_source \
+ ! decodebin \
+ ! queue \
+ ! x264enc \
+ ! mux. mpg123audiodec \
+ ! audioconvert \
+ ! audioresample \
+ ! queue \
+ ! mux.
+
+
+
+
+********************************
+
+GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots/dot_1401_06_07 \
+GST_DEBUG=1 gst-launch-1.0 flvmux name=mux streamable=true \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+ filesrc location =input name=file_source \
+ ! qtdemux name=demux demux.video_0 \
+ ! queue \
+ ! decodebin \
+ ! x264enc \
+ ! mux. demux.audio_0 \
+ ! queue \
+ ! decodebin  \
+ ! audioconvert \
+ ! audioresample \
+ ! mux.
+ 
+ 
+GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots \
+GST_DEBUG=1 gst-launch-1.0 flvmux name=mux streamable=true \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+ filesrc location =input name=file_source \
+ ! qtdemux name=demux demux.audio_0 \
+ ! queue \
+ ! decodebin  \
+ ! audioconvert \
+ ! audioresample \
+ ! mux.
+
+
+scp root@94.237.59.57:"//root/somm/'GStreamer_learn'/dots/PLP2_pipeline.pdf" C:\Users\omid.mousavi\Desktop\PLP2_pipeline.pdf
+
+
+
+
+
+**PAPL_06******************************
+
+GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots/dot_1401_06_07 \
+GST_DEBUG=1 gst-launch-1.0 flvmux name=mux streamable=true \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+ filesrc location =input name=file_source \
+ ! qtdemux name=demux demux.video_0 \
+ ! queue \
+ ! decodebin \
+ ! x264enc \
+ ! queue \
+ ! mux. demux.audio_0 \
+ ! queue \
+ ! decodebin  \
+ ! audioconvert \
+ ! audioresample \
+ ! queue \
+ ! mux.
+ 
+ 
+ 
+**PAPL 09******************************
+
+GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots/dot_1401_06_07 \
+GST_DEBUG=6 gst-launch-1.0 flvmux name=mux streamable=true \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+ filesrc location =input.mp4 name=file_source \
+ ! qtdemux name=demux demux.video_0 \
+ ! queue \
+ ! decodebin \
+ ! x264enc \
+ ! queue \
+ ! mux. demux.audio_0 \
+ ! queue \
+ ! decodebin \
+ ! audioconvert \
+ ! avenc_aac \
+ ! queue \
+ ! mux.
+ 
+ 
+ 
+ 
+  
+**PAPL 10******************************
+
+GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots/dot_1401_06_07 \
+GST_DEBUG=1 gst-launch-1.0 flvmux name=mux streamable=true \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+ filesrc location =input name=file_source \
+ ! qtdemux name=demux demux.video_0 \
+ ! mux. demux.audio_0 \
+ ! mux.
+ 
+ 
+ 
+
+  
+**PAPL 11******************************
+
+GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots/dot_1401_06_07 \
+GST_DEBUG=1 gst-launch-1.0 \
+ flvmux name=mux streamable=true \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+ filesrc location =input.mp4 \
+ ! qtdemux name=demux demux.video_0 \
+ ! decodebin \
+ ! x264enc \
+ ! mux. demux.audio_0 \
+ ! decodebin \
+ ! audioconvert \
+ ! avenc_aac \
+ ! mux.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+###PAPL 20########################################
+
+GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots/dot_1401_06_07 \
+GST_DEBUG=1 gst-launch-1.0 \
+ rtmpsrc location="rtmp://feed.ishiacloud.com/live/testkey8" \
+ ! flvdemux name=demux demux. \
+ ! flvmux name=mux streamable=true \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+ 
+ ! demux.audio \
+ ! mux. \
+ 
+ ! mux. demux.audio_0 \
+ ! mux.
+ 
+ 
+###PAPL 21########################################
+
+GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots/dot_1401_06_07 \
+GST_DEBUG=1 gst-launch-1.0 \
+ flvmux name=mux streamable=true \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+ rtmpsrc location="rtmp://feed.ishiacloud.com/live/testkey8" \
+ ! flvdemux name=demux demux.video \
+ ! mux. demux.audio \
+ ! mux. \
+ 
+ 
+ 
+ 
+###PAPL 22######################################## KILLED !!!!!
+
+GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots/dot_1401_06_07 \
+GST_DEBUG=1 gst-launch-1.0 \
+ flvmux name=mux streamable=true \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+ rtmpsrc location="rtmp://feed.ishiacloud.com/live/testkey8" \
+ ! flvdemux name=demux demux.video \
+ ! queue \
+ ! decodebin \
+ ! x264enc \
+ ! queue \
+ ! mux. demux.audio \
+ ! queue \
+ ! decodebin \
+ ! audioconvert \
+ ! avenc_aac \
+ ! queue \
+ ! mux. \
+ 
+ 
+ 
+###PAPL 22######################################## KILLED !!!!!
+
+GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots/dot_1401_06_07 \
+GST_DEBUG=1 gst-launch-1.0 \
+ rtmpsrc location="rtmp://feed.ishiacloud.com/live/testkey8" \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+ 
+
+ ! mux. demux.video \
+ ! mux. \
+ 
+ 
+###PAPL 23########################################
+
+GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots/dot_1401_06_07 \
+GST_DEBUG=1 gst-launch-1.0 \
+ rtmpsrc location="rtmp://feed.ishiacloud.com/live/testkey8" \
+ ! queue2 \
+ ! flvdemux name=demux flvmux name=mux demux.video \
+ ! queue \
+ ! mux.video demux.audio \
+ ! queue \
+ ! mux.audio mux.src \
+ ! queue \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+ 
+
+ 
+ 
+**PAPL 30******************************
+
+GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots/dot_1401_06_08 \
+GST_DEBUG=1 gst-launch-1.0 \
+ filesrc location =input.mp4 name=file_source \
+ ! queue \
+ ! qtdemux name=demux  flvmux name=mux streamable=true demux.video_0 \
+ ! queue \
+ ! mux.video demux.audio_0 \
+ ! queue \
+ ! mux.audio mux.src \
+ ! queue \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+
+ 
+ 
+ 
+**PAPL 32******************************
+
+GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots/dot_1401_06_08 \
+GST_DEBUG=1 gst-launch-1.0 \
+ filesrc location =input.mp4 name=file_source \
+ ! qtdemux name=demux  flvmux name=mux streamable=true demux.video_0 \
+ ! queue \
+ ! mux.video demux.audio_0 \
+ ! queue \
+ ! mux.audio mux.src \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+
+ 
+ 
+###PAPL 33########################################
+
+GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots/dot_1401_06_07 \
+GST_DEBUG=1 gst-launch-1.0 \
+ rtmpsrc location="rtmp://feed.ishiacloud.com/live/testkey8" \
+ ! flvdemux name=demux flvmux name=mux demux.video \
+ ! queue \
+ ! mux.video demux.audio \
+ ! queue \
+ ! mux.audio mux.src \
+ ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+ 

@@ -1,0 +1,12 @@
+GST_DEBUG_DUMP_DOT_DIR={desired dot file drectory} \
+GST_DEBUG=1 gst-launch-1.0 \
+ rtmpsrc location={desired input rtmp server (ingest + key)} \
+ ! queue2 \
+ ! flvdemux name=demux flvmux name=mux demux.video \
+ ! queue \
+ ! mux.video demux.audio \
+ ! queue \
+ ! mux.audio mux.src \
+ ! queue \
+ ! rtmpsink location={desired output rtmp server (ingest + key)} \
+ 

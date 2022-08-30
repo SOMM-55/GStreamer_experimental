@@ -1,0 +1,16 @@
+GST_DEBUG_DUMP_DOT_DIR={desired dot file drectory} \
+GST_DEBUG=6 gst-launch-1.0 flvmux name=mux streamable=true \
+ ! rtmpsink location={desired rtmp server (ingest + key)} async=true sync=true \
+ filesrc location={desired local file} name=file_source \
+ ! qtdemux name=demux demux.video_0 \
+ ! queue \
+ ! decodebin \
+ ! x264enc \
+ ! queue \
+ ! mux. demux.audio_0 \
+ ! queue \
+ ! decodebin \
+ ! audioconvert \
+ ! avenc_aac \
+ ! queue \
+ ! mux.
