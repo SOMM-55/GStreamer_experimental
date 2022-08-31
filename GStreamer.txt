@@ -323,7 +323,7 @@ GST_DEBUG=1 gst-launch-1.0 \
 **PAPL 32******************************
 
 GST_DEBUG_DUMP_DOT_DIR=/root/somm/GStreamer_learn/dots/dot_1401_06_08 \
-GST_DEBUG=1 gst-launch-1.0 \
+GST_DEBUG=6 gst-launch-1.0 \
  filesrc location =input.mp4 name=file_source \
  ! qtdemux name=demux  flvmux name=mux streamable=true demux.video_0 \
  ! queue \
@@ -345,4 +345,12 @@ GST_DEBUG=1 gst-launch-1.0 \
  ! queue \
  ! mux.audio mux.src \
  ! rtmpsink location="rtmp://lhr04.contribute.live-video.net/app/live_819987575_7xlN8tFlHR1QCoT4uk1Vw6YeNDTf4R live=1" async=true sync=true \
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
  
